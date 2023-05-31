@@ -15,6 +15,7 @@ namespace ExeUpdater
     {
         private readonly string logDirectory = "";
         private readonly string settingsFilePath = "settings.txt";
+        private readonly string defaultRemotePath = "https://www.smartmancs.com.tw/Download/Frank/remoteFolder1";
         private string LastUpdatedTime
         {
             get => tbLastUpdatedTime.Text;
@@ -67,7 +68,7 @@ namespace ExeUpdater
 
                 if (savedValues.Length >= 4)
                 {
-                    tbRemotePath.Text = string.IsNullOrEmpty(savedValues[0]) ? "https://www.smartmancs.com.tw/Download/Frank/remoteFolder1" : savedValues[0];
+                    tbRemotePath.Text = string.IsNullOrEmpty(savedValues[0]) ? defaultRemotePath : savedValues[0];
                     tbLocalPath.Text = savedValues[1];
                     lstFiles.Items.AddRange(savedValues[2].Split(','));
                     tbLastSavedTime.Text = savedValues[3];
@@ -76,7 +77,7 @@ namespace ExeUpdater
             }
             else
             {
-                tbRemotePath.Text = "https://www.smartmancs.com.tw/Download/Frank/remoteFolder1";
+                tbRemotePath.Text = defaultRemotePath;
             }
         }
 
@@ -98,7 +99,12 @@ namespace ExeUpdater
             }
 
             LogText("檢查更新...");
-
+            if (lstFiles.Items.Count == 0)
+            {
+                LogText("檔案清單為空，無指定更新的檔案");
+                ResetUI();
+                return;
+            }
             try
             {
                 using HttpClient client = new HttpClient();
@@ -216,6 +222,10 @@ namespace ExeUpdater
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
+            if (string.IsNullOrEmpty(tbFileName.Text))
+            {
+                return;
+            }
             lstFiles.Items.Add(tbFileName.Text);
             tbFileName.Clear();
             tbFileCount.Text = lstFiles.Items.Count.ToString();
@@ -297,40 +307,56 @@ namespace ExeUpdater
 
         private void lstStatus_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Control && e.KeyCode == Keys.C)
+            try
             {
-                StringBuilder sb = new StringBuilder();
-
-                foreach (var selectedItem in lstStatus.SelectedItems)
+                if (e.Control && e.KeyCode == Keys.C)
                 {
-                    string itemText = selectedItem.ToString() ?? "";
-                    sb.AppendLine(itemText);
-                }
+                    StringBuilder sb = new StringBuilder();
 
-                if (sb.Length > 0)
-                {
-                    Clipboard.SetText(sb.ToString());
+                    foreach (var selectedItem in lstStatus.SelectedItems)
+                    {
+                        string itemText = selectedItem.ToString() ?? "";
+                        sb.AppendLine(itemText);
+                    }
+
+                    if (sb.Length > 0)
+                    {
+                        Clipboard.SetText(sb.ToString());
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                LogText($"Something when run while copying status: {ex.Message}");
+            }
+            
         }
 
         private void lstFiles_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Control && e.KeyCode == Keys.C)
+            try
             {
-                StringBuilder sb = new StringBuilder();
-
-                foreach (var selectedItem in lstFiles.SelectedItems)
+                if (e.Control && e.KeyCode == Keys.C)
                 {
-                    string itemText = selectedItem.ToString() ?? "";
-                    sb.AppendLine(itemText);
-                }
+                    StringBuilder sb = new StringBuilder();
 
-                if (sb.Length > 0)
-                {
-                    Clipboard.SetText(sb.ToString());
+                    foreach (var selectedItem in lstFiles.SelectedItems)
+                    {
+                        string itemText = selectedItem.ToString() ?? "";
+                        sb.AppendLine(itemText);
+                    }
+
+                    if (sb.Length > 0)
+                    {
+                        Clipboard.SetText(sb.ToString());
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                LogText($"Something when run while copying file names: {ex.Message}");
+            }
+
         }
 
         private void btnPaste_Click(object sender, EventArgs e)

@@ -244,6 +244,7 @@
             // 
             lstFiles.Font = new Font("Consolas", 10.2F, FontStyle.Regular, GraphicsUnit.Point);
             lstFiles.FormattingEnabled = true;
+            lstFiles.HorizontalScrollbar = true;
             lstFiles.ItemHeight = 20;
             lstFiles.Location = new Point(23, 244);
             lstFiles.Name = "lstFiles";
