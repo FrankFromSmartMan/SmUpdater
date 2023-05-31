@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <ApplicationIcon>vcsupdaterequired_93493(2).ico</ApplicationIcon>
+    <AssemblyName>Updater</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="vcsupdaterequired_93493(2).ico" />
+  </ItemGroup>
+
+</Project>
