@@ -93,15 +93,15 @@ namespace ExeUpdater
 
             if (!Directory.Exists(localPath))
             {
-                LogText("[Error] 設定錯誤，本機路徑不存在");
+                LogText($"[Error] Folder: {localPath} does not exist.");
                 ResetUI();
                 return;
             }
 
-            LogText("檢查更新...");
+            LogText("Loading...");
             if (lstFiles.Items.Count == 0)
             {
-                LogText("檔案清單為空，無指定更新的檔案");
+                LogText("No file selected");
                 ResetUI();
                 return;
             }
@@ -126,13 +126,13 @@ namespace ExeUpdater
                     }
                     catch (HttpRequestException ex)
                     {
-                        LogText($"[Error] 無法下載檔案 '{fileName}': {ex.Message}");
+                        LogText($"[Error] Failed to send a request to: '{fileName}': {ex.Message}");
                         continue;
                     }
 
                     if (!response.IsSuccessStatusCode)
                     {
-                        LogText($"[Error] 無法下載檔案 '{fileName}'。 回傳錯誤代碼 {(int)response.StatusCode}");
+                        LogText($"[Error] Something went wrong. File: '{fileName}'. Code: {(int)response.StatusCode}");
                         continue;
                     }
 
@@ -157,32 +157,32 @@ namespace ExeUpdater
                             if (progressPercentage - previousProgressPercentage >= 20)
                             {
                                 progressBar.Invoke((MethodInvoker)(() => progressBar.Value = progressPercentage));
-                                LogText($"下載 '{fileName}': {progressPercentage}%");
+                                LogText($"File download progress: '{fileName}': {progressPercentage}%");
                                 previousProgressPercentage = progressPercentage;
                             }
                         }
 
                         completedFiles++;
-                        LogText($"檔案 '{fileName}' 下載儲存成功!");
+                        LogText($"Info: {fileName} has processed.");
                     }
                     catch (Exception ex)
                     {
-                        LogText($"[Error] 無法儲存下載後的檔案 '{fileName}': {ex.Message}");
+                        LogText($"[Error] Message: '{fileName}': {ex.Message}");
                     }
                 }
 
                 if (completedFiles == totalFiles)
                 {
-                    LogText("所有檔案下載儲存成功!");
+                    LogText("Completed!");
                 }
                 else
                 {
-                    LogText("[Error] 更新失敗: 部分檔案無法下載或儲存");
+                    LogText("Processing...");
                 }
             }
             catch (Exception ex)
             {
-                LogText("[Error] 更新失敗: " + ex.Message);
+                LogText("[Error] Message:" + ex.Message);
             }
             finally
             {
@@ -235,7 +235,7 @@ namespace ExeUpdater
         {
             if (lstFiles.SelectedItems.Count == 0)
             {
-                MessageBox.Show("請選擇檔案項目", "無檔案選取", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Warning", "No file selected", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -300,7 +300,7 @@ namespace ExeUpdater
             string filePath = "saveData.txt";
             File.WriteAllText(filePath, saveData);
 
-            MessageBox.Show("儲存成功", "儲存", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("Info", "Details", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             tbLastSavedTime.Text = currentTime.ToString();
         }
@@ -365,7 +365,7 @@ namespace ExeUpdater
 
             if (string.IsNullOrWhiteSpace(clipboardText))
             {
-                MessageBox.Show("剪貼簿的內容為空", "剪貼簿為空", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Info", "Copied to clipboard", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
@@ -374,7 +374,7 @@ namespace ExeUpdater
             int itemCount = items.Length;
             lstFiles.Items.AddRange(items);
 
-            MessageBox.Show($"{itemCount} 檔案項目已將入至清單", "新增檔案", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show($"{itemCount} Processed", "Done", MessageBoxButtons.OK, MessageBoxIcon.Information);
             tbFileCount.Text = lstFiles.Items.Count.ToString();
         }
     }
