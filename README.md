@@ -5,4 +5,5 @@ A WinForms app that streamlines the process for file update by setting a remote 
 2. Want to save your configuration? Click 'save' to store the entered config to save your time!
 ![image](https://github.com/user-attachments/assets/1e922411-c85d-4a08-9c99-ea56e2526977)
 4. Update your file(s) with a single click.
-![image](https://github.com/user-attachments/assets/8c162d24-2f6b-4289-9dca-05344c540dfc)
+![image](https://github.com/user-attachments/assets/710f031d-71f8-4343-a3d4-4e72e3149f0a)
+
